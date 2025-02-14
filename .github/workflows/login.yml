@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  CI:
+  CI & CD:
     runs-on: ubuntu-22.04
 
     steps:
@@ -34,30 +34,10 @@ jobs:
         run: |
           docker build -t horadoqa/cucumber-login:v1.0.0 .
 
-  TEST:
-    needs: ci  # Este job vai aguardar o job CI terminar com sucesso
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
-
       - name: Rodar os testes com Cucumber
         run: |
           docker run --rm horadoqa/cucumber-login:v1.0.0 npx cucumber-js
 
-  CD:
-    needs: test  # Este job vai aguardar o job Teste terminar com sucesso
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
-
-      - name: Login no Docker Hub (caso necessário)
-        run: |
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-
-      - name: Push da Imagem para o Docker Hub
+      - name: Push da Imagem para o Docker Hub (Somente se os testes passarem)
         run: |
           docker push horadoqa/cucumber-login:v1.0.0
