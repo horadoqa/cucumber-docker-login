@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  CI & CD:
+  CI_and_CD:
     runs-on: ubuntu-22.04
 
     steps:
