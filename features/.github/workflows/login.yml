@@ -1,0 +1,43 @@
+name: Teste Cucumber com Docker
+
+on:
+  push:
+    branches:
+      - main  # Você pode mudar para outra branch, caso queira
+  pull_request:
+    branches:
+      - main  # Quando houver um PR para a branch principal
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # A ação será executada em uma máquina com Ubuntu
+
+    services:
+      docker:
+        image: docker:19.03.12 # Utilizando a versão mais recente do Docker
+        options: --privileged  # Permite rodar containers com privilégios
+
+    steps:
+    - name: Check out o código
+      uses: actions/checkout@v2  # Faz o checkout do repositório
+
+    - name: Configurar Docker
+      run: |
+        sudo apt-get update
+        sudo apt-get install docker.io  # Instala o Docker, caso não esteja presente
+
+    - name: Build da Imagem Docker
+      run: |
+        docker build -t horadoqa/cucumber-login:v1.0.0 .
+
+    - name: Login no Docker Hub (caso necessário)
+      run: |
+        echo ${{ secrets.DOCKER_USERNAME }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+    - name: Push da Imagem para o Docker Hub
+      run: |
+        docker push horadoqa/cucumber-login:v1.0.0
+
+    - name: Rodar os Testes com Cucumber
+      run: |
+        docker run --rm horadoqa/cucumber-login:v1.0.0 npx cucumber-js

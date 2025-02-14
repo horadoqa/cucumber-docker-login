@@ -1,9 +1,16 @@
 # Docker
 
-## Criando a imagem
+## Criando a imagem localmente
 
 ```bash
 docker build -t cucumber-login .
+```
+
+## Criando a imagem com tag e enviando para o Registry
+
+```bash
+docker build -t horadoqa/cucumber-login:v1.0.0 .
+docker push horadoqa/cucumber-login:v1.0.0
 ```
 
 ## Rodar o container em modo interativo
@@ -68,6 +75,10 @@ docker stop <ID_do_container>
 
 ```bash
 docker rm <ID do Container>
+```
+
+```bash
+docker rm $(docker ps -aq)
 ```
 
 ## Excluir a imagem
