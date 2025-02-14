@@ -46,4 +46,4 @@ COPY . .
 EXPOSE 4444
 
 # Definir o comando para rodar os testes com Cucumber
-CMD ["npx", "cucumber-js"]
+CMD ["npx", "cucumber-js"] 
