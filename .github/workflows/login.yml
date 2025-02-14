@@ -1,4 +1,4 @@
-name: Teste com Docker e Cucumber
+name: CI/CD - Teste com Docker e Cucumber
 
 on:
   push:
@@ -10,32 +10,46 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04  # Você pode mudar para a versão de sua preferência
+    runs-on: ubuntu-22.04
 
     steps:
-    - name: Checkout do código
-      uses: actions/checkout@v3
+      - name: Checkout do código
+        uses: actions/checkout@v3
 
-    - name: Atualizar repositórios e instalar Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker.io  # Instala o Docker, caso não esteja presente
+      - name: Atualizar repositórios e instalar Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh  # Instalando o Docker sem conflitos com containerd
 
-    - name: Verificar a versão do Docker
-      run: docker --version  # Verifica se o Docker foi instalado corretamente
+      - name: Verificar a versão do Docker
+        run: docker --version
 
-    - name: Login no Docker Hub (caso necessário)
-      run: |
-        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      - name: Login no Docker Hub (caso necessário)
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-    - name: Construir a imagem Docker
-      run: |
-        docker build -t horadoqa/cucumber-login:v1.0.0 .
+      - name: Construir a imagem Docker
+        run: |
+          docker build -t horadoqa/cucumber-login:v1.0.0 .
 
-    - name: Rodar os testes com Cucumber
-      run: |
-        docker run --rm horadoqa/cucumber-login:v1.0.0 npx cucumber-js
+      - name: Rodar os testes com Cucumber
+        run: |
+          docker run --rm horadoqa/cucumber-login:v1.0.0 npx cucumber-js
 
-    - name: Push da Imagem para o Docker Hub
-      run: |
-        docker push horadoqa/cucumber-login:v1.0.0
+  deploy:
+    needs: build  # Garante que o deploy só será executado se o build for bem-sucedido
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Login no Docker Hub (caso necessário)
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Push da Imagem para o Docker Hub
+        run: |
+          docker push horadoqa/cucumber-login:v1.0.0
