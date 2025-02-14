@@ -40,4 +40,4 @@ jobs:
 
       - name: Push da Imagem para o Docker Hub (Somente se os testes passarem)
         run: |
-          docker push horadoqa/cucumber-login:v1.0.0
+          docker push horadoqa/cucumber-login:v1.0.0 
