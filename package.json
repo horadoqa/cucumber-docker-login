@@ -1,0 +1,10 @@
+{
+    "type": "module",
+    "devDependencies": {
+        "@cucumber/cucumber": "^11.2.0",
+        "chai": "^5.1.2",
+        "chromedriver": "^133.0.0",
+        "selenium-webdriver": "^4.28.1",
+        "webdriver-manager": "^12.1.9"
+    }
+}

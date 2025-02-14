@@ -1,4 +1,4 @@
-# Projeto com Cucumber e Docker
+# Docker
 
 ## Criando a imagem
 
@@ -17,24 +17,23 @@ docker run -it cucumber-login bash
 Verificar o Google Chrome: Execute o comando abaixo para verificar se o Google Chrome está instalado corretamente no container:
 
 ```bash
-google-chrome --version
+chromedriver --version
 ```
 
-✔ Versão: Google Chrome 133.0.6943.98
+Versão: 
 
 ## Verificar o ChromeDriver
 Verifique também se o ChromeDriver está instalado e acessível:
 
 ```bash
-chromedriver --version
+google-chrome --version
 ```
+Versão: Google Chrome 133.0.6943.98 
 
-✔ Versão: ChromeDriver 114.0.5735.90
-
-## Listar a pasta /app
+## Acessar a pasta /app
 
 ```bash
-ls -la /app
+cd /app
 ```
 
 ## Executar o teste
