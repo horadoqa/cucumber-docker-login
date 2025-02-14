@@ -85,4 +85,4 @@ docker rm $(docker ps -aq)
 
 ```bash
 docker rmi f <Id da Imagem>
-```
+``` 
