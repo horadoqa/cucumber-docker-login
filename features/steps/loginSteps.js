@@ -44,6 +44,12 @@ Then('o sistema deve exibir uma mensagem de erro de login', async function () {
   expect(errorText).to.include('E-mail ou senha inválidos!');
 });
 
+Then('o sistema deve exibir uma mensagem de que os dados são obrigatórios', async function () {
+  const errorMessage = await driver.wait(until.elementLocated(By.id('error-message')), 5000);
+  const errorText = await errorMessage.getText();
+  expect(errorText).to.include('E-mail e senha são obrigatórios!');
+});
+
 After(async function () {
   if (driver) {
     await driver.quit();
